@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="2023_09_04_19_30_create_tables" author="aigul">
+        <sqlFile path="changes/2023_09_04_19_30_create_tables.sql"
+                 relativeToChangelogFile="true"
+                 dbms="postgresql"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="2023_09_04_20_10_update_task_table" author="aigul">
+        <sqlFile path="changes/2023_09_04_20_10_update_task_table.sql"
+                 relativeToChangelogFile="true"
+                 dbms="postgresql"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="2023_09_04_20_40_insert_first_data" author="aigul">
+        <sqlFile path="changes/2023_09_04_20_40_insert_first_data.sql"
+                 relativeToChangelogFile="true"
+                 dbms="postgresql"
+                 endDelimiter=";"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+</databaseChangeLog>
