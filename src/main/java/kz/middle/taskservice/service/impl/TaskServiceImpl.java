@@ -1,6 +1,9 @@
 package kz.middle.taskservice.service.impl;
 
 import kz.middle.taskservice.dto.TaskDto;
+import kz.middle.taskservice.dto.UserDto;
+import kz.middle.taskservice.exception.UserNotFoundException;
+import kz.middle.taskservice.feign.UserFeignClient;
 import kz.middle.taskservice.mapper.TaskMapper;
 import kz.middle.taskservice.model.Task;
 import kz.middle.taskservice.repository.TaskRepository;
@@ -8,6 +11,7 @@ import kz.middle.taskservice.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,6 +19,8 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+
+    private final UserFeignClient userFeignClient;
 
     @Override
     public List<TaskDto> getTasks() {
@@ -28,12 +34,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto addTask(TaskDto task) {
-        return taskMapper.toDto(taskRepository.save(taskMapper.toEntity(task)));
+        UserDto userDto = userFeignClient.getUser(task.getAuthorId());
+        if (userDto != null) {
+            task.setDateCreated(LocalDateTime.now());
+            task.setStatus("Newx");
+            return taskMapper.toDto(taskRepository.save(taskMapper.toEntity(task)));
+        }
+        throw new UserNotFoundException(task.getAuthorId());
     }
 
     @Override
     public TaskDto updateTask(TaskDto task) {
-        return taskMapper.toDto(taskRepository.save(taskMapper.toEntity(task)));
+        UserDto userDto = userFeignClient.getUser(task.getAuthorId());
+        if (userDto != null) {
+            return taskMapper.toDto(taskRepository.save(taskMapper.toEntity(task)));
+       }
+        throw new UserNotFoundException(task.getAuthorId());
     }
 
     @Override
